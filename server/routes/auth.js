@@ -100,7 +100,7 @@ router.post("/login", async(req,res)=>{
       expires: new Date(
         Date.now() + 3 * 24 * 60 * 60 * 1000
       ),
-      httpOnly: false,
+      httpOnly: true,
       secure: true,
       sameSite: 'lax',
       domain: 'rad-croquembouche-a07bc3.netlify.app',
