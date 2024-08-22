@@ -103,7 +103,7 @@ router.post("/login", async(req,res)=>{
       httpOnly: false,
       secure: true,
       sameSite: 'lax',
-      domain: '.netlify.com',
+      domain: 'rad-croquembouche-a07bc3.netlify.app',
       path: '/',
     };
 
