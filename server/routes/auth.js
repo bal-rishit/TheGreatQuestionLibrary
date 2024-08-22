@@ -103,6 +103,8 @@ router.post("/login", async(req,res)=>{
       httpOnly: true,
       secure: true,
       sameSite: 'lax',
+      domain: '.netlify.com',
+      path: '/',
     };
 
     res.status(200).cookie("token", accessToken, options).json({
