@@ -101,7 +101,7 @@ router.post("/login", async(req,res)=>{
         Date.now() + 3 * 24 * 60 * 60 * 1000
       ),
       httpOnly: true,
-      secure: true,
+      // secure: true,
       sameSite: 'lax',
       // domain: 'rad-croquembouche-a07bc3.netlify.app',
       // path: '/',
