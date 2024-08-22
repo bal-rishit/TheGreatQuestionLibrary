@@ -104,7 +104,7 @@ router.post("/login", async(req,res)=>{
       // secure: true,
       sameSite: 'lax',
       domain: 'rad-croquembouche-a07bc3.netlify.app',
-      path: '/',
+      // path: '/',
     };
 
     res.status(200).cookie("token", accessToken, options).json({
