@@ -32,11 +32,12 @@ export const instance = new Razorpay({
 /////////////////////////////////////////////////////////
 
 app.set('view engine', 'ejs');
-// app.use(cors({
-//     origin: 'http://localhost:3000',
-//     credentials: true, // Allow cookies
-// })); 
-app.use(cors());    
+app.use(cors({
+    origin:  'https://rad-croquembouche-a07bc3.netlify.app',
+    credentials: true, // Allow cookies
+})); 
+ 
+// app.use(cors());    
 app.use(json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
