@@ -10,7 +10,7 @@ import { normalizeNotes } from 'razorpay/dist/utils/razorpay-utils.js';
 // config();
 const router = express.Router();
 
-
+const port = process.env.PORT || 5000
 // SEND MAIL
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
