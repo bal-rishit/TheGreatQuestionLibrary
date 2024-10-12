@@ -16,7 +16,6 @@ import cors from 'cors';
 import cookieParser from "cookie-parser";
 import Razorpay from "razorpay" ;
 
-
 config();
 
 connect(process.env.MONGO_URL)
@@ -57,9 +56,10 @@ app.get("/api/payment/getkey", (req, res) =>
   res.status(200).json({ key: process.env.RAZORPAY_API_KEY })
 );
 
+const port = process.env.PORT || 5000;
 
 
-app.listen(process.env.PORT || 5000, ()=>{
+app.listen(port, ()=>{
     console.log("Backend server running successfully");
 });
 
