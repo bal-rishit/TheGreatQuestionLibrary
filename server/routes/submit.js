@@ -6,6 +6,7 @@ import multer from 'multer';
 import { Dropbox } from 'dropbox';
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
+import getAccessToken from "./getAccessToken.js";
 
 
 // import fs from 'fs';
@@ -58,16 +59,49 @@ router.post('/submitPaper', async (req, res) => {
 const upload = multer(); // No disk storage, use memory for handling file uploads
 
 // Dropbox configuration
-const dropboxAccessToken = process.env.DROPBOX_ACCESS_TOKEN; // Ensure you store this in an environment variable
-const dbx = new Dropbox({ accessToken: dropboxAccessToken, fetch: fetch });
+let dropboxAccessToken = ""; // Ensure you store this in an environment variable
+// const dbx = new Dropbox({ accessToken: dropboxAccessToken, fetch: fetch });
 // Route to handle Dropbox file upload
+
+// Helper function to refresh token if needed
+const refreshDropboxAccessToken = async () => {
+  console.log("Fetching a new access token...");
+  dropboxAccessToken = await getAccessToken(); // Fetch a new token
+};
+
+// Helper function to handle Dropbox API requests and retry if token is expired
+const dropboxApiRequest = async (url, options) => {
+  try {
+    const response = await fetch(url, options);
+
+    // Check if the token is expired or invalid
+    if (response.status === 401 || response.status === 400) { // Unauthorized or invalid token
+      console.log('Access token expired or invalid, refreshing token...');
+      await refreshDropboxAccessToken(); // Refresh the token
+      // Retry the request with the new token
+      options.headers['Authorization'] = `Bearer ${dropboxAccessToken}`;
+      const retryResponse = await fetch(url, options);
+      return retryResponse;
+    }
+
+    return response; // Return response if it's valid
+  } catch (error) {
+    throw new Error('Error with Dropbox API request: ' + error.message);
+  }
+};
+
 router.post('/uploadDropbox', upload.single('file'), async (req, res) => {
   try {
     const { paperTitle } = req.body;
     const fileBuffer = req.file.buffer;
 
+    // Ensure we have a valid access token before making requests
+    if (!dropboxAccessToken) {
+      await refreshDropboxAccessToken(); // Get access token if none is available
+    }
+
     // Step 1: Upload the file to Dropbox
-    const dropboxResponse = await fetch('https://content.dropboxapi.com/2/files/upload', {
+    let dropboxResponse = await dropboxApiRequest('https://content.dropboxapi.com/2/files/upload', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${dropboxAccessToken}`,
