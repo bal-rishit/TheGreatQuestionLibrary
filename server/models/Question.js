@@ -17,6 +17,10 @@ const QuestionSchema = new Schema({
     type: String,
     required: true,
   },
+  explanation: {
+    type: String,
+    required: false,
+  },
   selectedOptions: {
     option1: {
       type: Boolean,
