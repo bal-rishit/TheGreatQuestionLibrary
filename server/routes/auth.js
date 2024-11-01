@@ -101,6 +101,7 @@ router.post("/login", async(req,res)=>{
         Date.now() + 3 * 24 * 60 * 60 * 1000
       ),
       httpOnly: true,
+      secure: true,
       sameSite: 'None',
     };
 
